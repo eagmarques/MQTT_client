@@ -1,6 +1,6 @@
 import paho.mqtt.client as mqtt_client
 from time import sleep
-
+import eas_reads as get_object_from_json
 
 class Mqtt(object):
 
@@ -132,11 +132,17 @@ class Mqtt(object):
 
     def on_message(self, client, userdata, msg):
 
-        received_msg = str(msg.payload)
+        try:
+            received_msg = str(msg.payload)
+            teste_object = get_object_from_json.Read
+            teste_object = teste_object.parse_message(teste_object, msg.payload)
 
-        print("[MSG RECEBIDA]/Topico: " + msg.topic)
-        print("Mensagem: " + received_msg)
-        print("Mensagem: " + received_msg)
+            print("[MSG RECEBIDA]/Topico: " + msg.topic)
+            print("Message payload lenght: " + str(len(msg.payload)))
+            print("Mensagem: " + received_msg)
+        except Exception as error:
+            print(error.__traceback__)
+        # parse_message(msg.payload)
 
 var_mqtt = Mqtt("10.0.0.66", 1883, "Teste_Eduardo")
 
@@ -151,3 +157,6 @@ while True:
 '''Informações uteis:
 link problema resubscribe: https://stackoverflow.com/questions/57395474/mqtt-doesnt-send-data-to-subscriber-after-reconnection
 outro link: https://stackoverflow.com/questions/36429609/mqtt-paho-python-reliable-reconnect'''
+
+
+
